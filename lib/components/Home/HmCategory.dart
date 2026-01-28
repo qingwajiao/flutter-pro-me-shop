@@ -8,6 +8,7 @@ class HmCategory extends StatefulWidget{
   
 }
 
+// todo 横向还不能滑动
 // ignore: camel_case_types
 class _HmCategoryState extends State<HmCategory> {
 

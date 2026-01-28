@@ -4,6 +4,7 @@ import 'package:me_shop/components/Home/HmHot.dart';
 import 'package:me_shop/components/Home/HmMoreList.dart';
 import 'package:me_shop/components/Home/HmSlider.dart';
 import 'package:me_shop/components/Home/HmSuggestion.dart';
+import 'package:me_shop/viewmodels/home.dart';
 
 class HmoeView extends StatefulWidget{
   const HmoeView({super.key});
@@ -13,13 +14,30 @@ class HmoeView extends StatefulWidget{
   
 }
 
+
+
 // ignore: camel_case_types
 class _hmoeViewState extends State<HmoeView> {
+
+    final  List<BannerItem> _bannerList = <BannerItem>[
+        BannerItem(
+      id: "1",
+      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg",
+    ),
+    BannerItem(
+      id: "2",
+      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png",
+    ),
+    BannerItem(
+      id: "3",
+      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg",
+    ),
+  ];
 
   List<Widget> _getHomeChildren(){
     return <Widget>[
       SliverToBoxAdapter(
-        child: HmSlider(),
+        child: HmSlider(bannerList:_bannerList),
       ),
       
       SliverToBoxAdapter(
