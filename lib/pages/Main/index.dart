@@ -55,7 +55,7 @@ class _mainPageState extends State<MainPage> {
 
   List<Widget> _getViews(){
     return [
-      HmoeView(),
+      HomeView(),
       CategoryView(),
       CartView(),
       MineView(),

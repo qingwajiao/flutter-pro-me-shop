@@ -53,9 +53,11 @@ class _HmSliderState extends State<HmSlider> {
         child: TextField(
           decoration: InputDecoration( 
             hintText: "搜索商品",
-            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white70, fontSize: 14),
+            border: InputBorder.none,// 去掉边框
             prefixIcon: Icon(Icons.search),
-            contentPadding: EdgeInsets.symmetric(vertical: 10), // 上下内边距10
+            
+            // contentPadding: EdgeInsets.symmetric(vertical: 10), // 上下内边距10
           ),
         ),
       ),

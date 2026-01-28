@@ -7,28 +7,44 @@ import 'package:me_shop/components/Home/HmSlider.dart';
 import 'package:me_shop/components/Home/HmSuggestion.dart';
 import 'package:me_shop/contants/index.dart';
 import 'package:me_shop/utils/DioRequest.dart';
+import 'package:me_shop/utils/ToastUtils.dart';
 import 'package:me_shop/viewmodels/home.dart';
 
-class HmoeView extends StatefulWidget{
-  const HmoeView({super.key});
+class HomeView extends StatefulWidget{
+  const HomeView({super.key});
   
   @override
-  State<StatefulWidget> createState() => _hmoeViewState();
+  State<StatefulWidget> createState() => _homeViewState();
   
 }
 
 
 
 // ignore: camel_case_types
-class _hmoeViewState extends State<HmoeView> {
+class _homeViewState extends State<HomeView> {
 
   List<BannerItem> _bannerList = [];
   List<CategoryItem> _categoryList = [];
-    SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
+  SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
     id: "",
     title: "",
     subTypes: [],
   );
+
+    // 热榜推荐
+  SpecialRecommendResult _inVogueResult = SpecialRecommendResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
+  // 一站式推荐
+  SpecialRecommendResult _oneStopResult = SpecialRecommendResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
+  List<GoodDetailItem> _recommendList = [];
+
   List<Widget> _getHomeChildren(){
     return <Widget>[
       SliverToBoxAdapter(
@@ -62,9 +78,9 @@ class _hmoeViewState extends State<HmoeView> {
           child:Flex(
           direction: Axis.horizontal, // 水平方向
           children: [
-            Expanded(child: HmHot()),
+            Expanded(child: HmHot(result: _specialRecommendResult, type: "hot")),
             SizedBox(width: 10,),
-            Expanded(child: HmHot()),
+            Expanded(child: HmHot(result: _specialRecommendResult,type: "step")),
           ],
           ),),
       ),
@@ -72,7 +88,7 @@ class _hmoeViewState extends State<HmoeView> {
         child: SizedBox(height: 10,),
       ),
 
-      HmMorelist(),
+      HmMorelist(recommendList:_recommendList),
 
     ];
   }
@@ -80,34 +96,99 @@ class _hmoeViewState extends State<HmoeView> {
   @override
   void initState() {
     // TODO: implement initState
-  
     super.initState();
-    _getBannerList();
-    _getCategoryList();
-    _getProductList();
-
+    _registerEvent();
+    Future.microtask(()  {
+      _refreshKey.currentState?.show();
+    });
   }
 
-  void _getBannerList() async{
+  // 注册滚动控制器
+  void _registerEvent(){
+    _controller.addListener(() {
+      if(_controller.position.pixels >= (_controller.position.maxScrollExtent -50)) {
+        print("到达底部");
+        _getRecommendList();
+      }
+    });
+  }
+
+  Future<void> _getBannerList() async{
      _bannerList = await getBannerListAPI();
-      setState(() {});
     }
 
-  void _getCategoryList() async{
+  Future<void> _getCategoryList() async{
     _categoryList = await getCategoryListAPI();
-    setState(() {});
   }
 
     // 获取特惠推荐列表
-  void _getProductList() async {
+  Future<void> _getProductList() async {
     _specialRecommendResult = await getProductListAPI();
-    setState(() {});
   }
 
+  
+  // 获取热榜推荐列表
+  Future<void> _getInVogueList() async {
+    _inVogueResult = await getInVogueListAPI();
+  }
+
+  // 获取一站式推荐列表
+  Future<void> _getOneStopList() async {
+    _oneStopResult = await getOneStopListAPI();
+  }
+
+  // 获取推荐列表
+  bool isLoading = false; // 是否正在加载数据
+  bool hasMore = true; // 是否有更多数据
+  int _page = 1; // 当前页码
+  Future<void> _getRecommendList() async {
+      if(isLoading || !hasMore)  {
+        return; // 如果正在加载数据或没有更多数据，直接返回
+      }
+    isLoading = true; // 设置正在加载数据
+    int requestLimit = _page * 8; // 每次请求的数据量
+    _recommendList = await getRecommendListAPI({"limit": requestLimit});
+    isLoading = false; // 数据加载完成
+    _page++; // 页码加1
+    if (_recommendList.length < requestLimit) {
+      hasMore = false; // 如果返回的数据少于请求的数量，说明没有更多数据
+    }
+  }
+
+  Future _onRefresh() async {
+    _paddingTop = 30;
+    setState(() {});
+    _page = 1;
+    hasMore = true;
+    isLoading = false;
+    await _getBannerList();
+    await _getCategoryList();
+    await _getProductList();
+    await _getInVogueList();
+    await _getOneStopList();
+    await _getRecommendList();
+    _paddingTop = 0;
+    setState(() {});
+    ToastUtils.showToast(context,"刷新完成");
+  }
+
+  GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
+  final ScrollController _controller = ScrollController();
+  double _paddingTop = 0;
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: _getHomeChildren(),
+    
+    return RefreshIndicator(
+      key: _refreshKey,
+      onRefresh: _onRefresh, 
+      child: AnimatedContainer(
+        duration: Duration(seconds: 1),
+        padding: EdgeInsets.only(top: _paddingTop),
+        child: CustomScrollView(
+          controller: _controller,
+          slivers: _getHomeChildren(),
+    ))
+,
     );
   }
 
