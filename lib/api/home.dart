@@ -10,3 +10,12 @@ Future<List<BannerItem>> getBannerListAPI() async{
     return BannerItem.formJSON(item as Map<String, dynamic>);
   }).toList();
   }
+
+// 获取分类数据
+Future<List<CategoryItem>> getCategoryListAPI() async{
+  return ((await dioRequest.get(HttpConstants.CATEGORY_LIST)) as List).map((
+    item,
+  ) {
+    return CategoryItem.formJSON(item as Map<String, dynamic>);
+  }).toList();
+  }

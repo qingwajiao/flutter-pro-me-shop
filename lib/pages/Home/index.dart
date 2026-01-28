@@ -22,8 +22,8 @@ class HmoeView extends StatefulWidget{
 // ignore: camel_case_types
 class _hmoeViewState extends State<HmoeView> {
 
-   List<BannerItem> _bannerList = [];
-  
+  List<BannerItem> _bannerList = [];
+  List<CategoryItem> _categoryList = [];
   List<Widget> _getHomeChildren(){
     return <Widget>[
       SliverToBoxAdapter(
@@ -34,7 +34,7 @@ class _hmoeViewState extends State<HmoeView> {
         child: SizedBox(height: 10,),
       ),
       SliverToBoxAdapter(
-        child: HmCategory(),
+        child: HmCategory(categoryList: _categoryList,),
       ),
       SliverToBoxAdapter(
         child: SizedBox(height: 10,),
@@ -78,6 +78,7 @@ class _hmoeViewState extends State<HmoeView> {
   
     super.initState();
     _getBannerList();
+    _getCategoryList();
 
   }
 
@@ -85,6 +86,11 @@ class _hmoeViewState extends State<HmoeView> {
      _bannerList = await getBannerListAPI();
       setState(() {});
     }
+
+  void _getCategoryList() async{
+    _categoryList = await getCategoryListAPI();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
