@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:me_shop/api/home.dart';
 import 'package:me_shop/components/Home/HmCategory.dart';
 import 'package:me_shop/components/Home/HmHot.dart';
 import 'package:me_shop/components/Home/HmMoreList.dart';
 import 'package:me_shop/components/Home/HmSlider.dart';
 import 'package:me_shop/components/Home/HmSuggestion.dart';
+import 'package:me_shop/contants/index.dart';
+import 'package:me_shop/utils/DioRequest.dart';
 import 'package:me_shop/viewmodels/home.dart';
 
 class HmoeView extends StatefulWidget{
@@ -19,21 +22,8 @@ class HmoeView extends StatefulWidget{
 // ignore: camel_case_types
 class _hmoeViewState extends State<HmoeView> {
 
-    final  List<BannerItem> _bannerList = <BannerItem>[
-        BannerItem(
-      id: "1",
-      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/1.jpg",
-    ),
-    BannerItem(
-      id: "2",
-      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/2.png",
-    ),
-    BannerItem(
-      id: "3",
-      imgUrl: "https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/meituan/3.jpg",
-    ),
-  ];
-
+   List<BannerItem> _bannerList = [];
+  
   List<Widget> _getHomeChildren(){
     return <Widget>[
       SliverToBoxAdapter(
@@ -81,6 +71,21 @@ class _hmoeViewState extends State<HmoeView> {
 
     ];
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+  
+    super.initState();
+    _getBannerList();
+
+  }
+
+  void _getBannerList() async{
+     _bannerList = await getBannerListAPI();
+      setState(() {});
+    }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

@@ -1,0 +1,12 @@
+
+import 'package:me_shop/contants/index.dart';
+import 'package:me_shop/utils/DioRequest.dart';
+import 'package:me_shop/viewmodels/home.dart';
+
+Future<List<BannerItem>> getBannerListAPI() async{
+  return ((await dioRequest.get(HttpConstants.BANNER_LIST)) as List).map((
+    item,
+  ) {
+    return BannerItem.formJSON(item as Map<String, dynamic>);
+  }).toList();
+  }
