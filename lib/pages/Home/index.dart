@@ -24,6 +24,11 @@ class _hmoeViewState extends State<HmoeView> {
 
   List<BannerItem> _bannerList = [];
   List<CategoryItem> _categoryList = [];
+    SpecialRecommendResult _specialRecommendResult = SpecialRecommendResult(
+    id: "",
+    title: "",
+    subTypes: [],
+  );
   List<Widget> _getHomeChildren(){
     return <Widget>[
       SliverToBoxAdapter(
@@ -43,7 +48,7 @@ class _hmoeViewState extends State<HmoeView> {
       SliverToBoxAdapter(
         child: Padding(
           padding:EdgeInsetsGeometry.symmetric(horizontal: 10), // 水平内边距10
-          child: HmSuggestion()
+          child: HmSuggestion(specialRecommendResult: _specialRecommendResult,)
         ),
       ),
 
@@ -79,6 +84,7 @@ class _hmoeViewState extends State<HmoeView> {
     super.initState();
     _getBannerList();
     _getCategoryList();
+    _getProductList();
 
   }
 
@@ -89,6 +95,12 @@ class _hmoeViewState extends State<HmoeView> {
 
   void _getCategoryList() async{
     _categoryList = await getCategoryListAPI();
+    setState(() {});
+  }
+
+    // 获取特惠推荐列表
+  void _getProductList() async {
+    _specialRecommendResult = await getProductListAPI();
     setState(() {});
   }
 
