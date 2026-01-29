@@ -1,4 +1,10 @@
+import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:me_shop/viewmodels/user.dart';
+import 'package:me_shop/contants/index.dart';
+import 'package:me_shop/stores/UserControl.dart';
+import 'package:me_shop/utils/DioRequest.dart';
 import 'package:me_shop/utils/ToastUtils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -66,6 +72,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  UserController _userController = Get.find<UserController>();
+  void _login() async {
+    String phone = _phoneController.text;
+    String code = _codeController.text;
+    try {
+      var res = await dioRequest.post(HttpConstants.LOGIN, data: {
+        "account": phone,
+        "password": code,
+      });
+      _userController.updateUserInfo( UserInfo.fromJSON(res));
+      ToastUtils.showToast(context, "登录成功");
+      Navigator.pop(context); // 返回上个页面
+    } catch (e) {
+      ToastUtils.showToast(context, (e as DioException).message);
+      return;
+    }
+
+  }
+
   // 登录按钮Widget
   Widget _buildLoginButton() {
     return SizedBox(
@@ -79,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
             ToastUtils.showToast(context, "请同意隐私条款和用户协议");
             return;
           }
+          _login();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,

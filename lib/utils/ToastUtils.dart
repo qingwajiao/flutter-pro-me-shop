@@ -7,6 +7,9 @@ class ToastUtils {
       return;
     }
     _showloading = true;
+    Future.delayed( Duration(seconds: 3), () {
+      _showloading = false;
+    });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         width: 120,

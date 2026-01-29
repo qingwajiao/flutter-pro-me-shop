@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:me_shop/api/mine.dart';
+import 'package:get/get.dart';
 import 'package:me_shop/components/Mine/HmGuess.dart';
 import 'package:me_shop/components/Home/HmMoreList.dart';
+import 'package:me_shop/stores/UserControl.dart';
 import 'package:me_shop/viewmodels/home.dart';
 
 class MineView extends StatefulWidget {
@@ -12,6 +14,7 @@ class MineView extends StatefulWidget {
 }
 
 class _MineViewState extends State<MineView> {
+  final UserController _userController = Get.put(UserController());
   Widget _buildHeader() {
     return Container(
       decoration: BoxDecoration(
@@ -24,27 +27,36 @@ class _MineViewState extends State<MineView> {
       padding: const EdgeInsets.only(left: 20, right: 40, top: 80, bottom: 20),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 26,
-            backgroundImage: const AssetImage('lib/assets/goods_avatar.png'),
-            backgroundColor: Colors.white,
-          ),
+          Obx((){
+            return CircleAvatar(
+              radius: 26,
+              backgroundImage:  _userController.user.value.avatar.isNotEmpty
+                  ? NetworkImage(_userController.user.value.avatar)
+                  : AssetImage('lib/assets/goods_avatar.png'),
+              backgroundColor: Colors.white,
+          );
+          }),
+
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
+                Obx((){
+                  return GestureDetector(
                   onTap: () {
                     // 点击登录逻辑
-                    print("点击登录");
-                    Navigator.pushNamed(context, '/login');
+                    if (_userController.user.value.id.isEmpty) {
+                        Navigator.pushNamed(context, '/login');
+                    }
                   },
                   child:Text(
+                    _userController.user.value.id.isNotEmpty ? _userController.user.value.account :
                   '立即登录',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-                ),
+                );
+                }),
               ],
             ),
           ),
