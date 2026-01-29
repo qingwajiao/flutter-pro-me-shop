@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:me_shop/api/user.dart';
+import 'package:me_shop/stores/TokenManager.dart';
+import 'package:me_shop/utils/LoadingDialog.dart';
 import 'package:me_shop/viewmodels/user.dart';
 import 'package:me_shop/contants/index.dart';
 import 'package:me_shop/stores/UserControl.dart';
@@ -74,17 +77,21 @@ class _LoginPageState extends State<LoginPage> {
 
   UserController _userController = Get.find<UserController>();
   void _login() async {
-    String phone = _phoneController.text;
-    String code = _codeController.text;
+
+    LoadingDialog.show(context, message: "努力登录中");
     try {
-      var res = await dioRequest.post(HttpConstants.LOGIN, data: {
-        "account": phone,
-        "password": code,
+      var res = await loginAPI( {
+        "account": _phoneController.text,
+        "password": _codeController.text,
       });
-      _userController.updateUserInfo( UserInfo.fromJSON(res));
+      _userController.updateUserInfo(res);
+      tokenManager.setToken(res.token); // 写入持久化数据
+
+      LoadingDialog.hide(context);
       ToastUtils.showToast(context, "登录成功");
       Navigator.pop(context); // 返回上个页面
     } catch (e) {
+      LoadingDialog.hide(context);
       ToastUtils.showToast(context, (e as DioException).message);
       return;
     }
