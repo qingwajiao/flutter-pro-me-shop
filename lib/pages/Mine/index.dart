@@ -33,10 +33,17 @@ class _MineViewState extends State<MineView> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // 点击登录逻辑
+                    print("点击登录");
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child:Text(
                   '立即登录',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
                 ),
               ],
             ),
