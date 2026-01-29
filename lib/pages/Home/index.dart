@@ -88,7 +88,7 @@ class _homeViewState extends State<HomeView> {
         child: SizedBox(height: 10,),
       ),
 
-      HmMorelist(recommendList:_recommendList),
+      HmMoreList(recommendList: _recommendList),
 
     ];
   }

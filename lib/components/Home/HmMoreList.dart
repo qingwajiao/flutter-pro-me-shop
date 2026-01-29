@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:me_shop/viewmodels/home.dart';
 
-class HmMorelist extends StatefulWidget{
+class HmMoreList extends StatefulWidget {
   final List<GoodDetailItem> recommendList;
-  HmMorelist({Key? key, required this.recommendList}) : super(key: key);
-  
+  HmMoreList({Key? key, required this.recommendList}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _HmMorelistState();
-  
+  State<HmMoreList> createState() => _HmMoreListState();
+
 }
 
-// ignore: camel_case_types
-class _HmMorelistState extends State<HmMorelist> {
+class _HmMoreListState extends State<HmMoreList> {
 
     Widget _getChildren(int index) {
     return Container(
