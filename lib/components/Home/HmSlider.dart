@@ -40,30 +40,27 @@ class _HmSliderState extends State<HmSlider> {
   }
 
     Widget _getSearch(){
-    return Positioned(
-      top: 15,
-      left: 20,
-      right: 20,
-      child: Container(
-        height: 25,
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(0, 0, 0, 0.4),
-          borderRadius: BorderRadius.circular(20), // 圆角
-        ),
-        child: TextField(
-          decoration: InputDecoration( 
-            hintText: "搜索商品",
-            contentPadding: EdgeInsets.only(left: 20), // 内容内边距
-            // floatingLabelAlignment: FloatingLabelAlignment.center,
-            hintStyle: TextStyle(color: Colors.white70, fontSize: 14),
-            border: InputBorder.none,// 去掉边框
-            prefixIcon: Icon(Icons.search),
-            
-            // contentPadding: EdgeInsets.symmetric(vertical: 10), // 上下内边距10
+      return Positioned(
+        top: MediaQuery.of(context).padding.top,
+        left: 20,
+        right: 20,
+        child: Container(
+          height: 25,
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(0, 0, 0, 0.4),
+            borderRadius: BorderRadius.circular(20), // 圆角
+          ),
+          child: TextField(
+            decoration: InputDecoration( 
+              hintText: "搜索",
+              border: InputBorder.none,// 去掉边框
+              prefixIcon: Icon(Icons.search),
+              
+              // contentPadding: EdgeInsets.symmetric(vertical: 10), // 上下内边距10
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _getDots(){

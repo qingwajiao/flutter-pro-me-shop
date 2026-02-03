@@ -107,6 +107,7 @@ class _HmSuggestionState extends State<HmSuggestion> {
       height: 300,
       padding: EdgeInsets.only(top: 20), // 上下间距10
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
             image: AssetImage("lib/assets/home_cmd_sm.png"),
             fit: BoxFit.cover, // 图片填充方式

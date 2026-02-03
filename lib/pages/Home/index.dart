@@ -107,7 +107,6 @@ class _homeViewState extends State<HomeView> {
   void _registerEvent(){
     _controller.addListener(() {
       if(_controller.position.pixels >= (_controller.position.maxScrollExtent -50)) {
-        print("到达底部");
         _getRecommendList();
       }
     });

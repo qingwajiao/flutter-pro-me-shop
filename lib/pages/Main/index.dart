@@ -87,11 +87,11 @@ class _mainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea( // 适配刘海屏
-        child: IndexedStack( // 保持页面状态
+      body: IndexedStack( // 保持页面状态
           index: _currentIndex,
           children: _getViews(), // 页面列表
-      ),),
+      ),
+      
 
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true, // 显示未选中标签
